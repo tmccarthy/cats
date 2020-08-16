@@ -25,6 +25,12 @@ val disciplineMunitVersion = "0.2.3"
 
 val kindProjectorVersion = "0.11.0"
 
+val PrimaryOS = "ubuntu-latest"
+ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
+
+val PrimaryJava = "adopt@1.8"
+ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava)
+
 val Scala212 = "2.12.12"
 ThisBuild / crossScalaVersions := Seq(Scala212, "2.13.3")
 
@@ -36,7 +42,7 @@ ThisBuild / githubWorkflowBuildMatrixAdditions +=
 val Dotty = "0.24.0"
 
 ThisBuild / githubWorkflowBuildMatrixInclusions +=
-  MatrixInclude(Map("platform" -> "jvm"), Map("scala" -> Dotty))
+  MatrixInclude(Map("os" -> PrimaryOS, "java" -> PrimaryJava, "platform" -> "jvm"), Map("scala" -> Dotty))
 
 val JvmCond = s"$${{ matrix.platform }} == 'jvm' && $${{ matrix.scala }} != '$Dotty'"
 val JvmScala212Cond = JvmCond + s" && $${{ matrix.scala }} == '$Scala212'"
