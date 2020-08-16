@@ -92,6 +92,8 @@ ThisBuild / mimaFailOnNoPrevious := false
 def doctestGenTestsDottyCompat(isDotty: Boolean, genTests: Seq[File]): Seq[File] =
   if (isDotty) Nil else genTests
 
+lazy val dottySettings = Seq(crossScalaVersions += Dotty)
+
 lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions(scalaVersion.value, isDotty.value),
   Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main", baseDirectory.value, scalaVersion.value),
@@ -535,6 +537,7 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies += ("org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test)
       .withDottyCompat(scalaVersion.value)
   )
+  .jvmSettings(dottySettings)
 
 lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .in(file("kernel-laws"))
@@ -549,6 +552,7 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel-laws", includeCats1 = false))
   .jsSettings(coverageEnabled := false)
   .dependsOn(kernel)
+  .jvmSettings(dottySettings)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -571,6 +575,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-core"))
+  .jvmSettings(dottySettings)
 
 lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -582,6 +587,7 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-laws", includeCats1 = false))
   .jsSettings(coverageEnabled := false)
+  .jvmSettings(dottySettings)
 
 lazy val free = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -626,6 +632,7 @@ lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("alleycats-core", includeCats1 = false))
+  .jvmSettings(dottySettings)
 
 lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -640,7 +647,7 @@ lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("alleycats-laws", includeCats1 = false))
   .jsSettings(coverageEnabled := false)
-  .jvmSettings(crossScalaVersions += Dotty)
+  .jvmSettings(dottySettings)
 
 lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
   .in(file("alleycats-tests"))
