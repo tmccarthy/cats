@@ -22,7 +22,7 @@ The Scala compiler may warn us in some cases, but not all, which can lead to som
 For example this code will raise a warning at compile time:
 
 
-```tut:book:fail
+```tut:book
 42 == "Hello"
 ```
 
